@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pm25-chart</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.5.0/echarts.min.js"></script>
+</head>
+
+<body>
+    <h1>圖形繪製</h1>
+    {{json_data}}
+    <div id="main" style="width: 600px;height:400px;"></div>
+    <script>
+        $.ajex(
+            {
+                url: "/pm25-data",
+                type: "GET",
+                dataType: "json",
+                success: (data) => {
+                    console.log(data);
+                    drawChart(chart1, data['site'], data['pm25'])
+                }
+
+            }
+        )
+
+        // 基于准备好的dom，初始化echarts实例
+        var myChart = echarts.init(document.getElementById('main'));
+        function drawChart(chart, xdata, ydata, title = "圖表", name = "數值"):
+            // 指定图表的配置项和数据
+            var option = {
+                title: {
+                    text: title
+                },
+                tooltip: {},
+                legend: {
+                    data: [name]
+                },
+                xAxis: {
+                    data: xdata
+                },
+                yAxis: {},
+                series: [
+                    {
+                        name: name,
+                        type: 'bar',
+                        data: ydata
+                    }
+                ]
+            };
+        return chart.setOption(option);
+        // 使用刚指定的配置项和数据显示图表。
+
+    </script>
+</body>
+
+</html>
